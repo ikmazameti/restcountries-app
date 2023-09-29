@@ -1,10 +1,10 @@
 package aish.android.countries.di
 
+import aish.android.countries.BuildConfig.DEBUG
 import aish.android.countries.R
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.BuildConfig.DEBUG
-import org.koin.android.ext.koin.androidContext
+ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

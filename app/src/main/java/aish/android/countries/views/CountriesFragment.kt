@@ -15,29 +15,29 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_countries.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountriesFragment : Fragment(), CountryClickListener {
-
-    private val countriesViewModel by viewModel<CountriesViewModel>()
+    private val countriesViewModel: CountriesViewModel by viewModel()
     private lateinit var countriesAdapter: CountriesAdapter
-    private lateinit var mViewDataBinding: FragmentCountriesBinding
+    private lateinit var binding: FragmentCountriesBinding
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViewDataBinding  = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_countries, container, false)
-        val mRootView = mViewDataBinding.root
-        mViewDataBinding.lifecycleOwner = this
-        return mRootView
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View  = FragmentCountriesBinding.inflate(inflater,container,false).also { binding=it }.root
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+                binding.lifecycleOwner = this
+
         setView()
         removeBackButton()
-        mViewDataBinding.viewModel = countriesViewModel
+        binding.viewModel = countriesViewModel
         countriesViewModel.getAllCountries()
         countriesViewModel.countriesList.observe(viewLifecycleOwner, Observer {
             Log.d("@@countries", it.size.toString())
@@ -45,7 +45,6 @@ class CountriesFragment : Fragment(), CountryClickListener {
                 countriesAdapter.setCountries(it)
             }
         })
-
     }
 
     private fun removeBackButton() {
@@ -55,13 +54,16 @@ class CountriesFragment : Fragment(), CountryClickListener {
 
     private fun setView() {
         countriesAdapter = CountriesAdapter(context, this)
-        rv_countries.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        rv_countries.adapter = countriesAdapter
-        rv_countries.isNestedScrollingEnabled = false
+        binding.rvCountries.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding.rvCountries.adapter = countriesAdapter
+        binding.rvCountries.isNestedScrollingEnabled = false
     }
 
-    override fun onItemClick(country : CountriesData) {
-        (activity as MainActivity).replaceFragment(CountriesDetailsFragment.newInstance(country),
-            R.id.fragment_container, "countriesdetails")
+    override fun onItemClick(country: CountriesData) {
+        (activity as MainActivity).replaceFragment(
+            CountriesDetailsFragment.newInstance(country),
+            R.id.fragment_container, "countriesdetails"
+        )
     }
 }

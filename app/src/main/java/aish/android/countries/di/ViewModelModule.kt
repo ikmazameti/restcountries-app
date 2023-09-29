@@ -1,7 +1,7 @@
 package aish.android.countries.di
 
 import aish.android.countries.viewmodel.CountriesViewModel
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {

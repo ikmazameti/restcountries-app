@@ -1,7 +1,6 @@
 package aish.android.countries.views
 
 import aish.android.countries.R
-import aish.android.countries.databinding.FragmentCountriesBinding
 import aish.android.countries.databinding.FragmentCountryDetailsBinding
 import aish.android.countries.db.model.CountriesData
 import aish.android.countries.util.TAG
@@ -27,37 +26,42 @@ class CountriesDetailsFragment : Fragment() {
     }
 
     private var country: CountriesData? = null
-    private lateinit var mViewDataBinding: FragmentCountryDetailsBinding
+    private lateinit var binding: FragmentCountryDetailsBinding
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        country =  arguments?.getParcelable("country_data_row")
+        country = arguments?.getParcelable("country_data_row")
         Log.d(TAG, country?.name.toString())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViewDataBinding  = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_country_details, container, false)
-        val mRootView = mViewDataBinding.root
-        mViewDataBinding.lifecycleOwner = this
-        return mRootView
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = FragmentCountryDetailsBinding.inflate(
+        inflater,
+        container, false
+    ).also { binding = it }.root
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
+
+        enableBackButton()
+        binding.country = country
+        var currency: String = ""
+        country?.currency?.forEach {
+            currency = "$it "
+        }
+        binding.currency = currency
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        enableBackButton()
-        mViewDataBinding.country = country
-        var currency : String = ""
-        country?.currency?.forEach {
-             currency = "$it "
-        }
-        mViewDataBinding.currency = currency
-    }
 
     private fun enableBackButton() {
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as? AppCompatActivity)?.supportActionBar?.setHomeButtonEnabled(true)
     }
-    
+
 }

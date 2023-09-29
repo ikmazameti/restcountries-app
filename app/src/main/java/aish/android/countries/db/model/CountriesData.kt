@@ -3,7 +3,7 @@ package aish.android.countries.db.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "Countries")
 @Parcelize
@@ -28,4 +28,6 @@ class CountriesData (
     val borders: List<String>?,
     val area: Double?
 ) : Parcelable
+
+
 
